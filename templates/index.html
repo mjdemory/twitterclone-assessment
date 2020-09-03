@@ -1,15 +1,10 @@
 <h1>Homepage</h1>
-{{display}}
+
 {% if request.user.is_authenticated %}
     <h2>Welcome, {{ request.user.username }}</h2>
 
     <P>
-        <a href="/logout/"><button>Logout</button>button</a>
+        <a href="/logout_view/"><button>Logout</button></a>
     </P>
-{% else %}
-    <h2>Not Welcome</h2>
-    <p>
-        <a href="/signup/"><button>Signup</button></a>
-        <a href="/login_view/"><input class="login" type="submit" value="Login"></a>
-    </p>
+    
 {%endif%}
