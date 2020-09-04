@@ -4,13 +4,16 @@ from django.contrib.auth import login
 
 from authentication.views import login_view
 from twitteruser.models  import TwitterUser
+from tweet.models import TweetModel
 from twitteruser.forms import SignupForm
-from django.conf import settings
+
 # Create your views here.
 
 @login_required
 def index(request):
-    return render(request, "index.html", {"display": settings.AUTH_USER_MODEL})
+    html = 'index.html'
+    latest_tweets = TweetModel.objects.all().order_by('post_date')
+    return render(request, html, {"tweets": latest_tweets})
 
 def signup_view(request):
     if request.method == "POST":
@@ -26,3 +29,10 @@ def signup_view(request):
             return HttpResponseRedirect(reverse('homepage'))
     form = SignupForm()
     return render(request, 'basic.html', {"form": form})
+
+
+def user_detail_view(request, tweet_id):
+    html = "user_detail.html"
+    my_user = TwitterUser.objects.filter(id=tweet_id).first()
+    user_tweets = TweetModel.objects.filter(author=my_user)
+    return render(request, html, {'usertweets': user_tweets})

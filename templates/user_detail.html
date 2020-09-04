@@ -1,0 +1,13 @@
+<a href="/"><input type="button" value="homepage"></a>
+
+<div class="container">
+    {% for tweet in usertweets %}
+    <ul>
+        <li>
+            @{{tweet.author.username}} - <a href="/tweet_detail_view/{{ tweet.id }}/">{{ tweet.post_date }}</a>
+            <p>{{ tweet.body}}</p>
+    </li>
+    </ul>
+    {% endfor %}
+
+</div>

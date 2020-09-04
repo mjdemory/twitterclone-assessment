@@ -18,10 +18,14 @@ from django.urls import path
 
 from twitteruser import views
 from authentication.views import login_view, logout_view
+from tweet.views import create_tweet_view, tweet_detail_view
 
 
 urlpatterns = [
     path('', views.index, name='homepage'),
+    path('create_tweet_view/', create_tweet_view, name='createtweet'),
+    path('tweet_detail_view/<int:tweet_id>/', tweet_detail_view, name='tweetdetail'),
+    path('user_detail_view/<int:tweet_id>/', views.user_detail_view, name='userdetail'),
     path('login_view/', login_view, name='login'),
     path('signup_view/', views.signup_view),
     path('logout_view/', logout_view, name='logout'),
