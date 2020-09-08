@@ -1,7 +1,14 @@
 <a href="/"><input type="button" value="homepage"></a>
 
+<h2>User: {{current_user}}</h2>
+<div>
+{% if current_user != user %}
+<a href="/follow_view/{{current_user.id}}"><p>Follow</p></a>
+<a href="/unfollow_view/{{current_user.id}}"><p>Unfollow</p>></a>
+{% endif %}
+</div>
 <div class="container">
-    {% for tweet in usertweets %}
+    {% for tweet in user_tweets %}
     <ul>
         <li>
             @{{tweet.author.username}} - <a href="/tweet_detail_view/{{ tweet.id }}/">{{ tweet.post_date }}</a>
@@ -9,5 +16,6 @@
     </li>
     </ul>
     {% endfor %}
-
+<h3>Number of Tweets: {{ user_tweets.count}}</h3>
+<h3>Number of Following: {{ follow_count }}</h3>
 </div>

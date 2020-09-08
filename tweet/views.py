@@ -5,6 +5,9 @@ from django.contrib.auth import login
 from tweet.models import TweetModel
 from tweet.forms import TweetForm
 from twitteruser.models import TwitterUser
+from notification.models import Notification
+
+import re
 
 # Create your views here.
 
@@ -14,11 +17,16 @@ def create_tweet_view(request):
         form = TweetForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            TweetModel.objects.create(
+            tweetpost = TweetModel.objects.create(
                 body=data.get('body'),
                 author=request.user,
             )
-    
+            if "@" in data['body']:
+                recipients = re.findall(r'@(\w+)', data.get('body'))
+                for recipient in recipients:
+                    match_user = TwitterUser.objects.get(username = recipient)
+                    if match_user:
+                        message = Notification.objects.create(msg_content=tweetpost, receiver=match_user)
             return HttpResponseRedirect(reverse("homepage"))
 
     form = TweetForm()

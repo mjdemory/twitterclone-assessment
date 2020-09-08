@@ -1,16 +1,18 @@
 <a href="/"><input class="homeButton" type="submit" value="Homepage"></a>
 <a href="/create_tweet_view/"><input class="tweetButton" type="submit" value="Tweet"></a>
 <a href="/user_detail_view/{{request.user.id}}/"><input class="profileButton" type="submit" value="My Profile"></a>
-
-
+<a href="/notification_view/"><input class="notificationButton" type="submit" value="Notifications"></a>
+<a href="/logout_view/"><button>Logout</button></a>
 
 <h1>Homepage</h1>
 {% if request.user.is_authenticated %}
     <h2>Welcome, {{ request.user.username }}</h2>
+
+    <h3>Number of Notifications: {{notification_count}}</h3>
     
     <div>
         <h3>What is the latest?</h3>
-        {% for tweet in tweets %}
+        {% for tweet in main_feed %}
             <ul>
                 <li>
                     <a href="/user_detail_view/{{tweet.author.id}}/">@{{tweet.author.username}}</a> - <a href="/tweet_detail_view/{{tweet.id}}/">{{tweet.post_date}}</a>
@@ -23,7 +25,3 @@
     
     
 {%endif%}
-
-<P>
-        <a href="/logout_view/"><button>Logout</button></a>
-</P>
