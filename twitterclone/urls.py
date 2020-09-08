@@ -23,11 +23,11 @@ from notification.views import notification_view
 
 urlpatterns = [
     path('', views.index, name='homepage'),
-    path('create_tweet_view/', create_tweet_view, name='createtweet'),
-    path('tweet_detail_view/<int:tweet_id>/', tweet_detail_view, name='tweetdetail'),
-    path('user_detail_view/<int:tweet_id>/', views.user_detail_view, name='userdetail'),
-    path('notification_view/', notification_view, name='notification'),
-    path('login_view/', login_view, name='login'),
+    path('create_tweet_view/', create_tweet_view.as_view(), name='createtweet'),
+    path('tweet_detail_view/<int:tweet_id>/', tweet_detail_view.as_view(), name='tweetdetail'),
+    path('user_detail_view/<int:tweet_id>/', views.user_detail_view.as_view(), name='userdetail'),
+    path('notification_view/', notification_view.as_view(), name='notification'),
+    path('login_view/', login_view.as_view(), name='login'),
     path('signup_view/', views.signup_view),
     path('logout_view/', logout_view, name='logout'),
     path('follow_view/<int:follow_id>/', views.follow_view, name='follow_view'),

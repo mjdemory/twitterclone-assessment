@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponseRedirect,reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from authentication.views import login_view
 from twitteruser.models  import TwitterUser
@@ -18,7 +21,7 @@ def index(request):
     main_feed = latest_tweets | following_list
     main_feed = main_feed.order_by("-post_date")
     notification_count = Notification.objects.filter(receiver__id=request.user.id, notification_flag=False)
-    return render(request, html, {"tweets": latest_tweets, "following_lists": following_list, "main_feed": main_feed, "notification_count": notification_count})
+    return render(request, html, {"tweets": latest_tweets, "following_lists": following_list, "main_feed": main_feed, "notification_count": len(notification_count)})
 
 
 def signup_view(request):
@@ -58,9 +61,18 @@ def unfollow_view(request, unfollow_id):
 
 
 
-def user_detail_view(request, tweet_id):
-    html = "user_detail.html"
-    my_user = TwitterUser.objects.filter(id=tweet_id).first()
-    user_tweets = TweetModel.objects.filter(author=my_user)
-    follow_count = len(my_user.following.all())
-    return render(request, html, {'user_tweets': user_tweets, "current_user": my_user, "follow_count": follow_count})
+# def user_detail_view(request, tweet_id):
+#     html = "user_detail.html"
+#     my_user = TwitterUser.objects.filter(id=tweet_id).first()
+#     user_tweets = TweetModel.objects.filter(author=my_user)
+#     follow_count = len(my_user.following.all())
+#     return render(request, html, {'user_tweets': user_tweets, "current_user": my_user, "follow_count": follow_count})
+
+class user_detail_view(LoginRequiredMixin,TemplateView):
+    def get(self, request, tweet_id):
+        html = "user_detail.html"
+        my_user = TwitterUser.objects.filter(id=tweet_id).first()
+        user_tweets = TweetModel.objects.filter(author=my_user)
+        follow_count = len(my_user.following.all())
+        return render(request, html, {'user_tweets': user_tweets, "current_user": my_user, "follow_count": follow_count})
+
