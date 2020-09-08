@@ -24,20 +24,39 @@ def index(request):
     return render(request, html, {"tweets": latest_tweets, "following_lists": following_list, "main_feed": main_feed, "notification_count": len(notification_count)})
 
 
-def signup_view(request):
-    if request.method == "POST":
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            new_user = TwitterUser.objects.create_user(
-                displayname=data.get("displayname"),
-                username=data.get("username"),
-                password=data.get("password"),
-                )
-            login(request, new_user)
-            return HttpResponseRedirect(reverse('homepage'))
-    form = SignupForm()
-    return render(request, 'basic.html', {"form": form})
+# def signup_view(request):
+#     if request.method == "POST":
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             data = form.cleaned_data
+#             new_user = TwitterUser.objects.create_user(
+#                 displayname=data.get("displayname"),
+#                 username=data.get("username"),
+#                 password=data.get("password"),
+#                 )
+#             login(request, new_user)
+#             return HttpResponseRedirect(reverse('homepage'))
+#     form = SignupForm()
+#     return render(request, 'basic.html', {"form": form})
+
+
+class signup_view(TemplateView):
+    def get(self, request):
+        form = SignupForm()
+        return render(request, 'basic.html', {"form": form})
+
+    def post(self, request):
+        if request.method == "POST":
+            form = SignupForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                new_user = TwitterUser.objects.create_user(
+                    displayname=data.get("displayname"),
+                    username=data.get("username"),
+                    password=data.get("password"),
+                    )
+                login(request, new_user)
+                return HttpResponseRedirect(reverse('homepage'))
 
 
 # lori code

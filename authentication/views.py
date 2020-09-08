@@ -5,36 +5,18 @@ from authentication.forms import LoginForm
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
-# def login_view(request):
-#     if request.method == "POST":
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             data = form.cleaned_data
-#             user = authenticate(request, username=data.get(
-#                 'username'), password=data.get("password"))
-#             if user:
-#                 login(request, user)
-#                 return HttpResponseRedirect(
-#                     request.GET.get('next', reverse("homepage")))
-#     form = LoginForm()
-#     return render(request, 'login.html', {"form": form})
-
-class login_view(LoginRequiredMixin,TemplateView):
-    def get(self, request):
-        form = LoginForm()
-        return render(request, 'login.html', {"form": form})
-
-    def post(self, request):
-        if request.method == "POST":
-            form = LoginForm(request.POST)
-            if form.is_valid():
-                data = form.cleaned_data
-                user = authenticate(request, username=data.get(
-                    'username'), password=data.get("password"))
-                if user:
-                    login(request, user)
-                    return HttpResponseRedirect(
-                        request.GET.get('next', reverse("homepage")))
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(request, username=data.get(
+                'username'), password=data.get("password"))
+            if user:
+                login(request, user)
+                return HttpResponseRedirect(reverse("homepage"))
+    form = LoginForm()
+    return render(request, 'login.html', {"form": form})
 
 def logout_view(request):
     logout(request)
